@@ -1,9 +1,9 @@
 import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { ImageReport } from '../entities/ImageReport';
-import { ImageReportService } from '../services/imageReport.service';
+import { ImageReport } from './imageReport.entity';
+import { ImageReportService } from './imageReport.service';
 
 @Controller('/api/report')
-export class VideoController {
+export class ImageReportController {
   constructor(private readonly imageReportService: ImageReportService) {}
 
   @Post()
