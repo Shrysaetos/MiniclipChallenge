@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UsingJoinColumnIsNotAllowedError } from 'typeorm';
 
 import { ImageReport } from './imageReport.entity';
 
@@ -8,10 +8,15 @@ import { ImageReport } from './imageReport.entity';
 export class ImageReportService {
   constructor(
     @InjectRepository(ImageReport)
-    public imageReportsRepository: Repository<ImageReport>,
+    private imageReportsRepository: Repository<ImageReport>,
   ) {}
 
-  async createNewReport(report: { image: Uint8Array; userId: number }) {
+  async createNewReport(report: {
+    image: Uint8Array;
+    userId: number;
+    comment: string;
+  }) {
+    console.log('RUnning THROUGFH SREVICE');
     const newReport = await this.imageReportsRepository.create(report);
     await this.imageReportsRepository.save(newReport);
     return newReport;

@@ -9,7 +9,7 @@ const AppDataSource = new DataSource({
   database: 'postgres',
   synchronize: true,
   logging: true,
-  entities: [__dirname + '/../*/*.entity.ts'],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/*.ts'],
   migrationsTableName: 'TYPEORM_MIGRATIONS',
   extra: {

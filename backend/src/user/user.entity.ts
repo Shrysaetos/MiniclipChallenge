@@ -5,8 +5,8 @@ import {
   OneToMany,
   BeforeInsert,
 } from 'typeorm';
-
 import * as bcrypt from 'bcrypt';
+
 import { ImageReport } from '../imageReport/imageReport.entity';
 
 @Entity('USER')
@@ -32,7 +32,6 @@ export class User {
 
   @BeforeInsert()
   async saltPassword() {
-    console.log("I'M HERE");
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(this.password, salt);
 
