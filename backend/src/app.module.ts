@@ -18,8 +18,6 @@ import { AuthModule } from './auth/auth.module';
       username: 'admin',
       password: 'admin',
       database: 'postgres',
-      synchronize: true,
-      logging: true,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       migrations: [__dirname + '/../database/migrations/*.ts'],
       migrationsTableName: 'TYPEORM_MIGRATIONS',

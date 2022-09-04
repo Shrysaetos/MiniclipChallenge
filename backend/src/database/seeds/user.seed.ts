@@ -18,5 +18,6 @@ export const UserSeed = [
     name: 'Admin1',
     username: `admin1`,
     password: `admin1`,
+    role: 'admin',
   },
 ];

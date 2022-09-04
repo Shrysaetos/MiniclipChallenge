@@ -14,7 +14,9 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   name: string;
 
   @Column({
@@ -26,6 +28,9 @@ export class User {
     nullable: false,
   })
   password: string;
+
+  @Column()
+  role: string;
 
   @OneToMany(() => ImageReport, (report) => report.user)
   reports: ImageReport[];

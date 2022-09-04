@@ -7,8 +7,6 @@ const AppDataSource = new DataSource({
   username: 'admin',
   password: 'admin',
   database: 'postgres',
-  synchronize: true,
-  logging: true,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/*.ts'],
   migrationsTableName: 'TYPEORM_MIGRATIONS',
