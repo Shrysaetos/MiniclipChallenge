@@ -57,6 +57,7 @@ const Report = ({ user }) => {
     formData.append("image", image);
     formData.append("comment", comment);
     formData.append("userId", user.id);
+    formData.append("callback", import.meta.env.VITE_CALLBACK);
 
     const token = localStorage.getItem("token");
     await axios

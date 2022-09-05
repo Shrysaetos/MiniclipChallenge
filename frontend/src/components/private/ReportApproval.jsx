@@ -64,10 +64,6 @@ const ReportApproval = () => {
     message: { isOpen: false, severity: "info", message: "" },
   });
 
-  const [buttonGroupOpen, setButtonGroupOpen] = useState(false);
-  const anchorRef = useRef();
-  const [selectedIndex, setSelectedIndex] = useState(1);
-
   const handleApproveReport = (id) => {
     dispatch({ type: "REPORT_UPDATE", id: id, property: "status", value: 2 });
   };
@@ -100,29 +96,7 @@ const ReportApproval = () => {
       });
   };
 
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
-    setButtonGroupOpen(false);
-    handleSubmit(options[index] === "Submit and Refresh");
-  };
-
-  const handleToggle = () => {
-    setButtonGroupOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClick = (e) => {
-    handleMenuItemClick(null, selectedIndex);
-  };
-
-  const handleButtonGroupClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setButtonGroupOpen(false);
-  };
-
-  const handleSubmit = async (refresh) => {
+  const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     await axios
       .patch(
@@ -144,7 +118,7 @@ const ReportApproval = () => {
               }
             : {}
         );
-        if (result.data.success && refresh) {
+        if (result.data.success) {
           setTimeout(handleGetReports(), 500);
         }
       })
@@ -182,66 +156,7 @@ const ReportApproval = () => {
       />
       <Box align="center" paddingTop={"30px"}>
         {reports.length > 0 ? (
-          <>
-            <ButtonGroup
-              variant="contained"
-              ref={anchorRef}
-              aria-label="split button"
-            >
-              <Button onClick={handleClick}>{options[selectedIndex]}</Button>
-              <Button
-                size="small"
-                aria-controls={
-                  buttonGroupOpen ? "split-button-menu" : undefined
-                }
-                aria-expanded={buttonGroupOpen ? "true" : undefined}
-                aria-label="select merge strategy"
-                aria-haspopup="menu"
-                onClick={handleToggle}
-              >
-                <ArrowDropDownIcon />
-              </Button>
-            </ButtonGroup>
-            <Popper
-              sx={{
-                zIndex: 1,
-              }}
-              open={buttonGroupOpen}
-              anchorEl={anchorRef.current}
-              role={undefined}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === "bottom" ? "center top" : "center bottom",
-                  }}
-                >
-                  <Paper>
-                    <ClickAwayListener onClickAway={handleButtonGroupClose}>
-                      <MenuList id="split-button-menu" autoFocusItem>
-                        {options.map((option, index) => (
-                          <MenuItem
-                            key={option}
-                            disabled={index === 2}
-                            selected={index === selectedIndex}
-                            onClick={(event) =>
-                              handleMenuItemClick(event, index)
-                            }
-                          >
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
-          </>
+          <Button onClick={handleSubmit} variant="contained">Submit</Button>
         ) : (
           <Typography variant="h4">
             There are not reports pending approval. Please come back latter
