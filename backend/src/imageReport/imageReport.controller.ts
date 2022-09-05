@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
   HttpStatus,
   Patch,
   Post,
@@ -13,12 +12,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-import * as tf from '@tensorflow/tfjs-node';
-import * as nsfwjs from 'nsfwjs';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { ImageReport, STATUS_PENDING } from './imageReport.entity';
+import { STATUS_PENDING } from './imageReport.entity';
 import { ImageReportService } from './imageReport.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -44,25 +41,20 @@ export class ImageReportController {
         });
       }
 
-      const model = await nsfwjs.load();
-      const decodedImage = await tf.node.decodeImage(image.buffer, 3);
-      const predictions = await model.classify(decodedImage);
-      const evaluation = predictions.reduce((finalEval, category) => {
-        if (['Neutral', 'Drawing'].includes(category.className)) {
-          return finalEval;
-        } else if (['Sexy'].includes(category.className)) {
-          return finalEval + category.probability;
-        } else {
-          return finalEval + category.probability;
-        }
-      }, 0);
-
+      if (
+        !['bmp', 'jpeg', 'png', 'gif'].includes(image.mimetype.split('/')[1])
+      ) {
+        return response.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: 'Image type not supported',
+        });
+      }
       const requestBody = {
         userId: report.userId,
         image: image.buffer.toString('base64'),
         comment: report.comment,
+        callback: report.callback,
         status: STATUS_PENDING,
-        evaluation: evaluation.toFixed(2),
       };
 
       const newReport = await this.imageReportService.createNewReport(

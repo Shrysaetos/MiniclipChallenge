@@ -4,6 +4,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  AfterInsert,
+  AfterUpdate,
+  BeforeUpdate,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 
@@ -16,28 +19,27 @@ export class ImageReport {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    nullable: false,
-  })
+  @Column()
   image: string;
 
-  @Column({
-    nullable: false,
-  })
+  @Column()
   userId: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   comment: string;
 
-  @Column({
-    nullable: false,
-  })
+  @Column()
   status: number;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   evaluation: number;
+
+  @Column()
+  callback: string;
 
   @JoinColumn({ name: 'userId' })
   @ManyToOne(() => User, (user) => user.reports)

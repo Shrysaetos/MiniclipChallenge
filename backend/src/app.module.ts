@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
@@ -11,17 +12,26 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'admin',
-      password: 'admin',
-      database: 'postgres',
-      entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-      migrations: [__dirname + '/../database/migrations/*.ts'],
-      migrationsTableName: 'TYPEORM_MIGRATIONS',
-      autoLoadEntities: true,
+    ConfigModule.forRoot({}),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: +configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          synchronize: true,
+          migrationsRun: true,
+          entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+          migrations: ['dist/database/migrations/*{.ts,.js}'],
+          migrationsTableName: 'TYPEORM_MIGRATIONS',
+          autoLoadEntities: true,
+        };
+      },
+      inject: [ConfigService],
     }),
     UserModule,
     ImageReportModule,

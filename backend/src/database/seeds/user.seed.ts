@@ -10,14 +10,15 @@ export const UserSeed = [
     password: `user2`,
   },
   {
-    name: 'User3',
-    username: `user3`,
-    password: `user3`,
-  },
-  {
     name: 'Admin1',
     username: `admin1`,
     password: `admin1`,
+    role: 'admin',
+  },
+  {
+    name: 'Admin2',
+    username: `admin2`,
+    password: `admin2`,
     role: 'admin',
   },
 ];
