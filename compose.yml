@@ -1,6 +1,25 @@
 version: '3.1'
 
 services:
+  backend:
+    build:
+      context: backend
+    ports: 
+      - 3000:3000
+    environment:
+      - DB_DATABASE=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+
+  frontend:
+    container_name: frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3001:80
 
   postgres:
     container_name: postgres
