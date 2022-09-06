@@ -22,6 +22,7 @@ RUN apt-get install --yes nodejs
 
 COPY package*.json ./
 RUN npm i
+RUN npm rebuild @tensorflow/tfjs-node --build-from-source
 
 COPY --chown=node:node . .
 RUN npm run build
