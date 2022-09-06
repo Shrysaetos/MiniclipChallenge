@@ -41,6 +41,7 @@ export class ImageReport {
   @Column()
   callback: string;
 
+  //TODO: Add new field userId for foreign api calls and replace this by loggedUser
   @JoinColumn({ name: 'userId' })
   @ManyToOne(() => User, (user) => user.reports)
   user: User;
