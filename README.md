@@ -20,13 +20,22 @@ docker-compose up
 
 ## API
 
-`POST /api/report`
+`POST /auth/login`
+```typescript
+Request.user = {
+  username: string,
+  password: string
+}
 ```
-Body: 
-  - Image Buffer
-  - Callback API endpoint
-  - User identifier
-  - Comment (optional)
+
+`POST /api/report`
+```typescript
+Body = {
+  image: File,
+  callback: string,
+  userId: number,
+  comment: string, (optional)
+}
 ```
 
 ## Seeding
@@ -60,7 +69,20 @@ The following users are provided:
 
 ## Usage
 
-Use your system to call the exported endpoint or use the following URL to access the provided UI: [Image Reporter](http://localhost:3001/)  
-//TODO: Talk about users? Does system need to login to use API?
-To be able to approve/reject reports, you need to be logged on the UI with a User with the "admin" role  
-When the report status is changed from `Pending` to `Rejected` or `Approved`, the provided callback endpoint is called
+###### Create a Report
+
+First decide if you're going to use a detached system or the provided UI ([Image Reporter](http://localhost:3001/)) to call the API  
+If you're using the UI:
+```
+  Login with any user
+  Create a report
+```
+If you're using a detached system:
+```
+  Send POST request to `/auth/login` endpoint; This will return an access token
+  Send POST request to  `api/report` adding access token to Authorization Header as a Bearer Token
+```
+
+###### Approve a Report
+Login on the UI with a User with the "admin" role (e.g. username: admin1, password: admin1): [Image Reporter](http://localhost:3001/)  
+When the report status is changed from `Pending` to `Rejected` or `Approved`, the provided callback endpoint will be called  
