@@ -18,26 +18,6 @@ cd MiniclipChallenge
 docker-compose up
 ```
 
-## API
-
-`POST /auth/login`
-```typescript
-Request.user = {
-  username: string,
-  password: string
-}
-```
-
-`POST /api/report`
-```typescript
-Body = {
-  image: File,
-  callback: string,
-  userId: number,
-  comment: string, (optional)
-}
-```
-
 ## Seeding
 
 The USER table is seeded automatically, to provide basic user authentication.
@@ -65,6 +45,26 @@ The following users are provided:
     password: `admin2`,
     role: 'admin',
   }
+```
+
+## API
+
+`POST /auth/login`
+```typescript
+Request.user = {
+  username: string,
+  password: string
+}
+```
+
+`POST /api/report`
+```typescript
+Body = {
+  image: File,
+  callback: string,
+  userId: number,
+  comment: string, (optional)
+}
 ```
 
 ## Usage
